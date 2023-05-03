@@ -59,6 +59,8 @@ class MyBot:
 
     def start_listen(self):
         for text in self.listen():
+            print('>', text)
+
             if text == 'блокнот':
                 os.system('notepad.exe')
 
@@ -100,8 +102,6 @@ class MyBot:
 
             elif text == "информация":
                 self.info()
-
-            print('>', text)
 
     def test(self):
         req = requests.get('https://dog.ceo/api/breeds/image/random')
