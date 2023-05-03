@@ -4,12 +4,12 @@ import pyttsx3
 tts = pyttsx3.init()
 
 voices = tts.getProperty('voices')
-tts.setProperty('voices', 'en')
+tts.setProperty('voices', 'ru')
 
 for voice in voices:
     print(voice.name)
-    if voice == "Microsoft Zira Desktop - English (United States)":
+    if voice == "Microsoft Irina Desktop - Russian":
         tts.setProperty('voice', voice.id)
 
-tts.say("Hello")
+tts.say("Привет")
 tts.runAndWait()
