@@ -3,6 +3,7 @@ import json
 import os
 
 import pyttsx3, pyaudio, vosk
+import requests
 
 tts = pyttsx3.init()
 
@@ -46,11 +47,27 @@ def listen():
                 yield answer['text']
 
 
+pwd = None
 for text in listen():
     if text == 'блокнот':
         os.system('notepad.exe')
+
     elif text == 'закрыть':
         quit()
+
+    elif text == 'пароль':
+        req = requests.get('https://passwordinator.onrender.com/?num=true')
+        data = req.json()
+        pwd = data['data']
+        print(pwd)
+
+    elif text == 'сохранить':
+        if pwd:
+            with open("result.txt", 'w') as file:
+                file.write(pwd)
+                print('recorded')
+        else:
+            print('nothing to recorded')
     else:
         print(text)
 
