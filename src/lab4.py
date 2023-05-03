@@ -1,5 +1,6 @@
 # import modele that can convert voice to text
 import json
+import os
 
 import pyttsx3, pyaudio, vosk
 
@@ -46,4 +47,10 @@ def listen():
 
 
 for text in listen():
-    print(text)
+    if text == 'блокнот':
+        os.system('notepad.exe')
+    elif text == 'закрыть':
+        quit()
+    else:
+        print(text)
+
