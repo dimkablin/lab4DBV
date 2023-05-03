@@ -12,7 +12,9 @@ class MyBot:
     def __init__(self):
         self.picture = None
         self.success = False
-        self.message = None
+        self.message = ""
+        self.type_of_dog = ""
+        self.id = ""
 
         self.tts = pyttsx3.init()
 
@@ -51,6 +53,10 @@ class MyBot:
                 if answer['text']:
                     yield answer['text']
 
+    def info(self):
+        print(self.message,
+              self.success)
+
     def start_listen(self):
         for text in self.listen():
             if text == 'блокнот':
@@ -62,29 +68,52 @@ class MyBot:
             elif text == 'картинка':
                 req = requests.get('https://dog.ceo/api/breeds/image/random')
                 data = req.json()
-                success = data['status']
-                if success:
-                    message = data['message']
-                    urllib.request.urlretrieve("message", "picture_temp.png")
-                    picture = Image.open("picture_temp.png")
+                self.success = data['status']
+                if self.success:
+                    self.message = data['message']
+                    self.type_of_dog = self.message.split("/")[-2]
+                    self.id = self.message.split("/")[-1]
+                    urllib.request.urlretrieve(self.message, "picture_temp.png")
+                    self.picture = Image.open("picture_temp.png")
 
             elif text == 'сохранить':
-                if success:
-                    picture.save("temp.png")
+                if self.success:
+                    self.picture.save("temp.png")
                     print('saved')
                 else:
                     print('nothing to recorded')
 
-            elif text == "показать":
-                picture.show()
+            elif text == "покажи":
+                if self.success:
+                    self.picture.show()
+                else:
+                    self.say_something("Картинки нет")
 
-            elif text == "назвать породу":
-                if success:
-                    type_of_dog = None
-                    self.say_something("DOG")
+            elif text == "тип":
+                if self.success:
+                    self.say_something(self.type_of_dog)
+                    print(self.type_of_dog)
 
-            elif text == "разрешение":
-                if success:
-                    pass
-            else:
-                print(text)
+            elif text == "качество":
+                if self.success:
+                    print(self.picture.size)
+
+            elif text == "информация":
+                self.info()
+
+            print('>', text)
+
+    def test(self):
+        req = requests.get('https://dog.ceo/api/breeds/image/random')
+        data = req.json()
+        self.success = data['status']
+        if self.success:
+            self.message = data['message']
+            urllib.request.urlretrieve(self.message, "picture_temp.png")
+            self.picture = Image.open("picture_temp.png")
+            self.picture.show()
+
+
+maBot = MyBot()
+maBot.start_listen()
+
